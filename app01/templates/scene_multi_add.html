@@ -1,0 +1,31 @@
+{% extends 'auth_layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> 批量添加景点日期（若景点从未被添加过，请先添加景点） </h3>
+            </div>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>景点</label>
+                        <input type="text" class="form-control" placeholder="景点" name="sc_name"/>
+                        {{ error1 }}
+                    </div>
+                    <div class="form-group">
+                        <label>日期（格式为yyyy-mm-dd，多个日期间用;隔开）</label>
+                        <input type="text" class="form-control" placeholder="日期" name="multi_date"/>
+                        <span style="color: red;">{{ error2 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>价格</label>
+                        <input type="number" step="0.01" class="form-control" placeholder="价格" name="price"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary"> 提 交</button>
+                    <a class="btn btn-primary"  href="/auth/{{ uid }}/scene/list/"> 返 回</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

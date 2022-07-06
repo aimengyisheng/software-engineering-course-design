@@ -1,0 +1,64 @@
+{% extends 'company_layout.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-success" href="/company/{{ uid }}/route/{{ rid }}/scene/add">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                添加景点
+            </a>
+            <a class="btn btn-primary" href="/company/{{ uid }}/route/list/"> 返 回</a>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                具体行程
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>景点</th>
+                    <th>日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for content in content_list %}
+                    <tr>
+                        <td><a class="btn btn-primary btn-xs"
+                               href="/company/{{ uid }}/route/{{ content.sc_id }}/scene/">{{ content.scene }}</a></td>
+                        <td>{{ content.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                注意事项
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>{{ attention }}</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script href="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#dt').datepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '8',
+                language: 'zh-CN',
+                autoclose: true
+            });
+        })
+    </script>
+{% endblock %}

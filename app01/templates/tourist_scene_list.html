@@ -1,0 +1,94 @@
+{% extends 'tourist_layout.html' %}
+{% load state_extras %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+            <div style="float: right;width: 300px;">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="搜索景点名称相关" name="q"
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                景点列表
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>景点名称</th>
+                    <th>门票价格</th>
+                    <th>剩余名额</th>
+                    <th>景点介绍</th>
+                    <th>日期</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.scenic_name }}</td>
+                        <td>{{ obj.scenic_price }}</td>
+                        <td>{{ obj.remaining_ticket }}/{{ obj.total_ticket }}</td>
+                        <td><a class="btn btn-primary btn-xs"
+                               href="/tourist/{{ uid }}/scene/{{ obj.id }}/content/">介绍</a></td>
+                        <td>{{ obj.scenic_time|date:"Y-m-d" }}</td>
+                        {% if obj.scenic_time < today %}
+                            <td style="color: red">已过期</td>
+                        {% elif obj.remaining_ticket <= 0 %}
+                            <td style="color: red">名额已满</td>
+                        {% else %}
+                            <td style="color: green">可预订</td>
+                        {% endif %}
+                        <td style="color: red">
+                            {% if obj.scenic_time < today or obj.remaining_ticket <= 0 %}
+                                不可预订
+                            {% elif state|f:obj.id == 0 %}
+                                <a class="btn btn-primary btn-xs"
+                                   href="/tourist/{{ uid }}/scene/{{ obj.id }}/book/">预订</a>
+                            {% else %}
+                                <a class="btn btn-primary btn-xs" href="/tourist/{{ uid }}/scene/{{ obj.id }}/cancel/">取消预订</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul class="pagination">
+            <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true"><<</span></a></li>
+            {{ page_string }}
+            <li><a href="#" aria-label="Next"><span aria-hidden="true">>></span></a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script href="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#dt').datepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '8',
+                language: 'zh-CN',
+                autoclose: true
+            });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> {{ title }} </h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {% if field.label == '用户所在公司' %}
+                                <label>{{ field.label }}</label>
+                                <input type="text" class="form-control" placeholder="公司" name="company"/>
+                                <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% elif field.label != '身份证号' %}
+                                <label>{{ field.label }}*</label>
+                                {{ field }}
+                                <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% else %}
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                                <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary"> 提 交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
